@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/Picktest11"); // connect to our database
+mongoose.connect(process.env.MONGODB_URI); // connect to our database
 
 var dba = mongoose.connection;
 
