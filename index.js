@@ -193,7 +193,9 @@ app.get("/deletepickmy", function(req, res) {
   });
 });
 
-app.listen(3000, function() {
+var port = process.env.PORT || 3000;
+
+app.listen(port, function() {
   console.log('Pick Server running on port 3000!')
 })
 
