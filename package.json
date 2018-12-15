@@ -1,0 +1,19 @@
+{
+  "name": "pick-server",
+  "version": "1.0.0",
+  "description": "server of pick app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "mongoose": "^5.3.15",
+    "passport": "^0.4.0"
+  }
+}
