@@ -152,7 +152,7 @@ app.get("/deletecomment", function(req, res) {
 
 //주변의 콕 찾아서 제시
 app.get("/getpicknearby", function(req, res) {
-  var coords = [req.query.latitude, req.query.longitude];
+  var coords = [req.query.longitude, req.query.latitude];
   //클라이언트로 부터 ID, 위도, 경도를 받아 가까운것에 있는것들을 json 형태로 반환.
   db.Data.find({
     location: {
@@ -161,7 +161,7 @@ app.get("/getpicknearby", function(req, res) {
           type: "Point",
           coordinates: coords
         },
-        $maxDistance: 1000
+        $maxDistance: 5000
       }
     }
   }, function(err, docs) {
