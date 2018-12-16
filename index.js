@@ -47,7 +47,6 @@ app.get("/user/signin", function(req, res) {
     password: req.query.password
   }, function(err, docs) {
     if (err) throw err;
-
     if (docs == null) {
       res.sendStatus(409)
     } else {
@@ -79,7 +78,7 @@ app.get("/addpick", function(req, res) {
   //클라이언트로 부터 ID, 위도, 경도, 메시지를 받아서 저장한다.
   const location = {
     type: 'Point',
-    coordinates: [req.query.latitude, req.query.longitude]
+    coordinates: [req.query.longitude, req.query.latitude]
   };
 
   var newkok = new db.Data();

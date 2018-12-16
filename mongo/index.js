@@ -26,17 +26,6 @@ var dataSchema = mongoose.Schema({
         },
         coordinates: [Number]
     }
-    /*location: {
-       type: {
-         type: String,
-         enum: ['Point'],
-         required: true
-       },
-       coordinates: {
-         type: [Number],
-         required: true
-       }
-    }*/
 });
 
 dataSchema.index({ location : '2dsphere'});
