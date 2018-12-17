@@ -75,7 +75,7 @@ app.get("/getuserinfo", function(req, res) {
 
 app.get("/edituserinfo", function(req, res) {
   db.User.findOne({
-    _id: req.query.useruid
+    email: req.query.useremail
   }, function(err, docs) {
     if (err) throw err;
 
