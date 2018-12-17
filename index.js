@@ -162,7 +162,7 @@ app.get("/getpicknearby", function(req, res) {
           type: "Point",
           coordinates: coords
         },
-        $maxDistance: 5000
+        $maxDistance: 1000
       }
     }
   }, function(err, docs) {
