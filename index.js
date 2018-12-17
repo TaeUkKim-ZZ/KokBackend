@@ -73,6 +73,32 @@ app.get("/getuserinfo", function(req, res) {
   });
 });
 
+app.get("/edituserinfo", function(req, res) {
+  db.User.findOne({
+    _id: req.query.useruid
+  }, function(err, docs) {
+    if (err) throw err;
+
+    //유저 수정 내용 반영.....
+    if(req.query.password != null) {
+        docs.update({$set:{password : req.query.password}});
+    } else if(req.query.nickname != null) {
+        docs.update({$set:{nickname : req.query.nickname}});
+    } else if(req.query.gender != null) {
+        docs.update({$set:{gender: req.query.gender}});
+    } else if(req.query.introduce != null) {
+        docs.update({$set:{introduce: req.query.introduce}});
+    }
+
+    if (docs == null) {
+      res.sendStatus(409)
+    } else {
+      console.log(docs);
+      res.send(docs) //Json response
+    }
+  });
+});
+
 //콕 추가.
 app.get("/addpick", function(req, res) {
   //클라이언트로 부터 ID, 위도, 경도, 메시지를 받아서 저장한다.
@@ -136,10 +162,6 @@ app.get("/deletecomment", function(req, res) {
     if (err) return res.status(500);
     else console.log(comment);
 
-    //comment.comments.pull({authorauthid: req.query.authorauthid, contents : req.query.contents});
-    //comment.comments.deleted = true;
-
-    //comment.comments.findOneAndUpdate()
     comment.comments.pull({
       _id: req.query.idofcomment
     });
