@@ -80,21 +80,31 @@ app.get("/edituserinfo", function(req, res) {
     if (err) throw err;
 
     //유저 수정 내용 반영.....
-    if(req.query.password != null) {
-        docs.update({$set:{password : req.query.password}});
-    } else if(req.query.nickname != null) {
-        docs.update({$set:{nickname : req.query.nickname}});
-    } else if(req.query.gender != null) {
-        docs.update({$set:{gender: req.query.gender}});
-    } else if(req.query.introduce != null) {
-        docs.update({$set:{introduce: req.query.introduce}});
+    if(req.query.password != "") {
+        //docs.update({$set:{password : req.query.password}});
+        docs.password = req.query.password;
+    } else if(req.query.nickname != "") {
+        //docs.update({$set:{nickname : req.query.nickname}});
+        docs.nickname = req.query.nickname;
+    } else if(req.query.gender != "") {
+        //docs.update({$set:{gender: req.query.gender}});
+        docs.gender = req.query.gender;
+    } else if(req.query.introduce != "") {
+        //docs.update({$set:{introduce: req.query.introduce}});
+        docs.introduce = req.query.introduce;
     }
+
+    docs.save(function(err) {
+      if (err) {
+        throw err;
+      } else res.send(docs);
+    });
 
     if (docs == null) {
       res.sendStatus(409)
     } else {
       console.log(docs);
-      res.send(docs) //Json response
+      //res.send(docs) //Json response
     }
   });
 });
