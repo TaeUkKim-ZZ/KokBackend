@@ -83,6 +83,7 @@ app.get("/addpick", function(req, res) {
 
   var newkok = new db.Data();
   newkok.userauthid = req.query.userauthid;
+  newkok.usernickname = req.query.usernickname;
   newkok.message = req.query.message;
   newkok.location = location;
 
