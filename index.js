@@ -185,7 +185,7 @@ app.get("/getpickmy", function(req, res) {
 //자신의 콕 제거하기
 app.get("/deletepickmy", function(req, res) {
   //고유 ID를 받아서 제거한다.
-  db.User.remove({
+  db.Data.remove({
     _id: req.query.deleteuseruid
   }, function() {
     // removed.
