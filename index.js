@@ -178,19 +178,20 @@ app.get("/addcomment", function(req, res) {
 
 app.get("/deletecomment", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.
-  db.Data.findOne({
-    _id: req.query.userauthid
-  }, function(err, comment) {
+  db.Data.findOneAndUpdate(
+    {_id: req.query.userauthid}, { $pull: { comments: {_id: req.query.idofcomment} } }, function(err, comment) {
     if (err) return res.status(500);
     else console.log(comment);
+
+    res.send(comment);
 
     //comment.comments.pull({ _id: req.query.idofcomment}, function(err, data) {
     //});
 
-    comment.update( { $pull: { comments: {_id: req.query.idofcomment} } }, function(err) {
+    /*comment.update( , function(err) {
       if (err) res.status(500);
       else res.send(comment);
-    });
+    });*/
   });
 });
 
