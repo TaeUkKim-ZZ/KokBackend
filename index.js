@@ -142,6 +142,18 @@ app.get("/deletepick", function(req, res) {
   });
 });
 
+app.get("/getcomments", function(req, res) {
+  //Userauthid, longitude, longitude를 받아서 댓글 추가.
+  db.Data.findOne({
+    _id: req.query.userauthid //글 고유번호
+  }, function(err, comment) {
+    if (err) return res.status(500);
+    else console.log(comment);
+
+    if(comment != null) res.send(comment);
+  });
+});
+
 //콕에 댓글 추가.
 app.get("/addcomment", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.
@@ -154,7 +166,7 @@ app.get("/addcomment", function(req, res) {
     comment.comments.push({
       contents: req.query.contents,
       authorauthid: req.query.authorauthid,
-      deleted: false
+      authorusernickname: req.query.authorusernickname
     });
 
     comment.save(function(err) {

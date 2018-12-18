@@ -12,6 +12,7 @@ var userSchema = mongoose.Schema({
 var commentSchema = new Schema({
     contents: String,
     authorauthid: String,
+    authorusernickname: String,
     comment_date: {type: Date, default: Date.now()}
 });
 
