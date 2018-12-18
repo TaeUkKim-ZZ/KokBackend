@@ -184,9 +184,8 @@ app.get("/deletecomment", function(req, res) {
     if (err) return res.status(500);
     else console.log(comment);
 
-    comment.comments.pull({
-      _id: req.query.idofcomment
-    }).exec();
+    comment.comments.pull({ _id: req.query.idofcomment}, function(err, data) {
+    });
 
     comment.update(function(err) {
       if (err) res.status(500);
