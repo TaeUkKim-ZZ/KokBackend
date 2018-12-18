@@ -187,7 +187,7 @@ app.get("/deletecomment", function(req, res) {
     //comment.comments.pull({ _id: req.query.idofcomment}, function(err, data) {
     //});
 
-    comment.update( { $pull: { comments: _id: req.query.idofcomment } }, function(err) {
+    comment.update( { $pull: { comments: {_id: req.query.idofcomment} } }, function(err) {
       if (err) res.status(500);
       else res.send(comment);
     });
