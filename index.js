@@ -81,16 +81,12 @@ app.get("/edituserinfo", function(req, res) {
 
     //유저 수정 내용 반영.....
     if(req.query.password != "") {
-        //docs.update({$set:{password : req.query.password}});
         docs.password = req.query.password;
     } else if(req.query.nickname != "") {
-        //docs.update({$set:{nickname : req.query.nickname}});
         docs.nickname = req.query.nickname;
     } else if(req.query.gender != "") {
-        //docs.update({$set:{gender: req.query.gender}});
         docs.gender = req.query.gender;
     } else if(req.query.introduce != "") {
-        //docs.update({$set:{introduce: req.query.introduce}});
         docs.introduce = req.query.introduce;
     }
 
@@ -137,8 +133,6 @@ app.get("/deletepick", function(req, res) {
   db.User.remove({
     _id: req.query.deleteuseruid
   }, function() {
-    // removed.
-    // 잘 작동하는것 같다.
   });
 });
 
@@ -180,22 +174,11 @@ app.get("/deletecomment", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.
   var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
   db.Data.findOneAndUpdate(
-    {_id: req.query.userauthid},  {$pull: { comments : { _id: newId}}}, function(err, comment) {
+    {_id: req.query.userauthid}, {$pull: { comments : { _id: newId}}}, function(err, comment) {
     if (err) return res.status(500);
     else {
       console.log(comment); res.send(comment)
     }
-
-    //comment.comments.pull({ contents: req.query.commentcontents});
-    //comment.comments.remove({ _id : newId });
-
-    //comment.update({ $pull : { comments : { _id : newId } } });
-
-    /*comment.save(function(err) {
-      if (err) res.status(500);
-      else res.send(comment);
-    });*/
-
   });
 });
 
@@ -236,8 +219,6 @@ app.get("/deletepickmy", function(req, res) {
   db.Data.remove({
     _id: req.query.deleteuseruid
   }, function() {
-    // removed.
-    // 잘 작동하는것 같다.
   });
 });
 
