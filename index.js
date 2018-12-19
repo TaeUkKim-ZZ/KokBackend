@@ -178,15 +178,16 @@ app.get("/addcomment", function(req, res) {
 
 app.get("/deletecomment", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.
-  db.Data.findOne(
-    {_id: req.query.userauthid}, function(err, comment) {
+  var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
+  db.Data.findOneAndUpdate(
+    {_id: req.query.userauthid},  {$pull: { comments : { _id: newId}}}, function(err, comment) {
     if (err) return res.status(500);
-    else console.log(comment);
+    else {
+      console.log(comment); res.send(comment)
+    }
 
-    var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
     //comment.comments.pull({ contents: req.query.commentcontents});
-    console.log(newId);
-    comment.comments.remove({ _id : newId });
+    //comment.comments.remove({ _id : newId });
 
     //comment.update({ $pull : { comments : { _id : newId } } });
 
