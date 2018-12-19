@@ -13,9 +13,6 @@ var dba = mongoose.connection;
 
 var app = express();
 
-var Schema = mongoose.Schema;
-const ObjectId = Schema.Types.ObjectId;
-
 //회원가입
 app.get("/user/signup", function(req, res) {
   //console.log(req.query.email);
@@ -186,7 +183,8 @@ app.get("/deletecomment", function(req, res) {
     if (err) return res.status(500);
     else console.log(comment);
 
-    comment.pull( { comments: {_id: ObjectId(req.query.idofcomment) } } );
+    var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
+    comment.pull( { comments: {_id: newId } } );
     res.send(comment);
 
     /*comment.comments.pull({ _id: req.query.idofcomment}, function(err, data) {
