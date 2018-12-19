@@ -184,16 +184,13 @@ app.get("/deletecomment", function(req, res) {
     else console.log(comment);
 
     var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
-    comment.pull( { comments: {_id: newId } } );
-    res.send(comment);
-
-    /*comment.comments.pull({ _id: req.query.idofcomment}, function(err, data) {
+    comment.comments.pull({ _id: newId}, function(err, data) {
     });
 
-    comment.update( , function(err) {
+    comment.save(function(err) {
       if (err) res.status(500);
       else res.send(comment);
-    });*/
+    });
 
   });
 });
