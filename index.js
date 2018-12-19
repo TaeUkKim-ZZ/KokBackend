@@ -13,6 +13,7 @@ var dba = mongoose.connection;
 
 var app = express();
 
+var Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
 //회원가입
