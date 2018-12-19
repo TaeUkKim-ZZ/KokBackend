@@ -185,9 +185,10 @@ app.get("/deletecomment", function(req, res) {
 
     var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
     //comment.comments.pull({ contents: req.query.commentcontents});
-    //comment.pull({“comments”: { “contents”: req.query.commentcontents } });
+    console.log(newId);
+    comment.pull({“comments”: { “_id”: newId } });
 
-    comment.update({ $pull : { comments : { _id : newId } } });
+    //comment.update({ $pull : { comments : { _id : newId } } });
 
     /*comment.save(function(err) {
       if (err) res.status(500);
