@@ -183,10 +183,10 @@ app.get("/deletecomment", function(req, res) {
     if (err) return res.status(500);
     else console.log(comment);
 
-    var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
-    comment.comments.pull({ _id: newId});
+    //var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
+    comment.comments.pull({ comment_date: req.query.commentdate});
 
-    comment.update(function(err) {
+    comment.save(function(err) {
       if (err) res.status(500);
       else res.send(comment);
     });
