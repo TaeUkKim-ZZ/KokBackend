@@ -184,7 +184,7 @@ app.get("/deletecomment", function(req, res) {
     else console.log(comment);
 
     //var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
-    comment.comments.pull({ contents: req.query.commentcontents});
+    comment.comments.isdeleted = true;
     //comment.pull({“comments”: { “contents”: req.query.commentcontents } });
 
     comment.save(function(err) {
