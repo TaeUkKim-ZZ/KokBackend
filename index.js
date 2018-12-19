@@ -183,14 +183,16 @@ app.get("/deletecomment", function(req, res) {
     if (err) return res.status(500);
     else console.log(comment);
 
-    //var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
-    comment.comments.isdeleted = true;
+    var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
+    //comment.comments.pull({ contents: req.query.commentcontents});
     //comment.pull({“comments”: { “contents”: req.query.commentcontents } });
 
-    comment.save(function(err) {
+    comment.update({ $pull : { 'comments' : { '_id' : newId } } });
+
+    /*comment.save(function(err) {
       if (err) res.status(500);
       else res.send(comment);
-    });
+    });*/
 
   });
 });
