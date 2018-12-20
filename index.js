@@ -44,7 +44,8 @@ app.get("/user/signup", function(req, res) {
         password: req.query.password, //클리이언트에서 암호화해서 보내자....
         gender: req.query.gender,
         nickname: req.query.nickname,
-        introduce: req.query.introduce
+        introduce: req.query.introduce,
+        profileimage: 'default'
       });
 
       console.log('User Register : \n' + newUser);
@@ -262,7 +263,7 @@ const storage = new GridFsStorage({
           return reject(err);
         }
         //파일 이름을 유저 고유 authid로 하는 방법 없을까?
-        const filename = path.extname(file.originalname);
+        const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
           bucketName: 'uploads'
@@ -274,8 +275,30 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
+//이미지 파일(프로필 파일)을 POST로 보내면 DB에 등록하고 JSON으로 뿌려진 파일명을 가지고 와서 저장한다.
 app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
-    res.json({file : req.file});
+    res.json(req.file);
+
+    db.User.findOne({
+      _id: req.query.userauthid
+    }, function(err, docs) {
+      if (err) throw err;
+
+      docs.profileimage = req.file.filename;
+
+      docs.save(function(err) {
+        if (err) {
+          throw err;
+        } else res.send(docs);
+      });
+
+      if (docs == null) {
+        res.sendStatus(409)
+      } else {
+        console.log(docs);
+        //res.send(docs) //Json response
+      }
+    });
 });
 
 app.get('/files', function(req, res) {
@@ -306,5 +329,24 @@ app.get('/images/:filename', function(req, res) {
          err: 'Not an image'
        });
      }
+   });
+});
+
+app.get('/files/:filename', function(req, res) {
+   gfs.files.findOne({filename: req.params.filename}, function(err, file) {
+     if(!file || file.length === 0) {
+       return res.status(404).json({
+         err: 'No file exists'
+       })
+     }
+
+     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+     } else {
+       res.status(404).json ({
+         err: 'Not an image'
+       });
+     }
+
+     return res.json(file);
    });
 });

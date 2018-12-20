@@ -6,7 +6,8 @@ var userSchema = mongoose.Schema({
     password: {type: String}, // 유저 비밀번호
     gender : {type : String},
     nickname : {type: String},
-    introduce : {type: String}
+    introduce : {type: String},
+    profileimage : {type: String}
 });
 
 var commentSchema = new Schema({
