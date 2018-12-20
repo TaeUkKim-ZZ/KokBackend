@@ -21,7 +21,7 @@ var commentSchema = new Schema({
 var dataSchema = mongoose.Schema({
     userauthid: {type: String}, // 유저 메일
     usernickname: {type: String},
-    profileimage: {type: string},
+    profileimage: {type: String},
     message : {type: String},
     comments : [commentSchema],
     location : {
