@@ -244,7 +244,7 @@ dba.on('error', console.error.bind(console, 'connection error:'));
 
 dba.once('open', function(callback) {
   console.log("mongo DB connected...")
-  var gfs = Grid(dba.db, mongoose.mongo);
+  gfs = Grid(dba.db, mongoose.mongo);
   gfs.collection('uploads');
 });
 
