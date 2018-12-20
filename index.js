@@ -255,7 +255,6 @@ const storage = new GridFsStorage({
           return reject(err);
         }
         //파일 이름을 유저 고유 authid로 하는 방법 없을까?
-        console.log(req.body);
         const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
@@ -270,4 +269,37 @@ const upload = multer({ storage });
 
 app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
     res.json({file : req.file});
+});
+
+app.get('/files', function(req, res) {
+   gfs.files.find().toArray(function(err, files) {
+     if(!files || files.length === 0) {
+       return res.status(404).json({
+         err : 'No files exist'
+       });
+     }
+
+     return res.json(files);
+   });
+});
+
+app.get('/files/:filename', function(req, res) {
+   gfs.files.findOne({filename: req.params.filename}, function(err, file) {
+     if(!file || file.length === 0) {
+       return res.status(404).json({
+         err: 'No file exists'
+       })
+     }
+
+     if(file.contentType === 'image/jpeg' || file.contentType === 'img/png') {
+        const readstream = gfs.creatReadStream(file.filename);
+        readstream.pipe(res);
+     } else {
+       res.status(404).json ({
+         err: 'Not an image'
+       });
+     }
+
+     return res.json(file);
+   });
 });
