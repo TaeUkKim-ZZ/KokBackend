@@ -273,7 +273,6 @@ app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
       }
 
       docs.profileimage = req.file.filename;
-
       docs.save();
     });
 });
@@ -298,7 +297,7 @@ app.get('/images/:filename', function(req, res) {
        })
      }
 
-     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg') {
         const readstream = gfs.createReadStream(file.filename);
         readstream.pipe(res);
      } else {
@@ -317,7 +316,7 @@ app.get('/files/:filename', function(req, res) {
        })
      }
 
-     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg') {
      } else {
        res.status(404).json ({
          err: 'Not an image'
