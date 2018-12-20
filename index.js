@@ -297,7 +297,7 @@ app.get('/images/:filename', function(req, res) {
        })
      }
 
-     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg') {
+     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg' || file.contentType === 'multipart/form-data') {
         const readstream = gfs.createReadStream(file.filename);
         readstream.pipe(res);
      } else {
@@ -316,7 +316,7 @@ app.get('/files/:filename', function(req, res) {
        })
      }
 
-     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg') {
+     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg' || file.contentType === 'multipart/form-data') {
      } else {
        res.status(404).json ({
          err: 'Not an image'
