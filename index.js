@@ -2,7 +2,7 @@ var express = require('express');
 
 var router = express.Router();
 var db = require('./mongo');
-var crypto = require('crypto'); //Node.js 에서 제공하는 암호화 모듈
+const crypto = require('crypto'); //Node.js 에서 제공하는 암호화 모듈
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
@@ -12,7 +12,6 @@ mongoose.connect(process.env.MONGODB_URI); // connect to our database
 var dba = mongoose.connection;
 var app = express();
 var Grid = require('gridfs-stream');
-const crypto = require('crypto');
 const path = require('path');
 const GridFsStorage = require('multer-gridfs-storage');
 
@@ -265,5 +264,5 @@ const upload = multer({ storage });
 
 app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
     res.json({file : req.file});
-    
+
 });
