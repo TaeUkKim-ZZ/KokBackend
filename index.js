@@ -21,10 +21,26 @@ var bodyParser = require('body-parser')
 
 let gfs;
 
-/*app.use(bodyParser.json());       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-}));*/
+const storage = new GridFsStorage({
+  url: process.env.MONGODB_URI ,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        //파일 이름을 유저 고유 authid로 하는 방법 없을까?
+        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: 'uploads'
+        };
+        resolve(fileInfo);
+      });
+    });
+  }
+});
+const upload = multer({ storage });
 
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
@@ -240,47 +256,13 @@ app.get("/deletepickmy", function(req, res) {
   });
 });
 
-var port = process.env.PORT || 3000;
-
-app.listen(port, function() {
-  console.log('Pick Server running on port 3000!')
-})
-
-dba.on('error', console.error.bind(console, 'connection error:'));
-
-dba.once('open', function(callback) {
-  console.log("mongo DB connected...")
-  gfs = Grid(dba.db, mongoose.mongo);
-  gfs.collection('uploads');
-});
-
-const storage = new GridFsStorage({
-  url: process.env.MONGODB_URI ,
-  file: (req, file) => {
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(16, (err, buf) => {
-        if (err) {
-          return reject(err);
-        }
-        //파일 이름을 유저 고유 authid로 하는 방법 없을까?
-        const filename = buf.toString('hex') + path.extname(file.originalname);
-        const fileInfo = {
-          filename: filename,
-          bucketName: 'uploads'
-        };
-        resolve(fileInfo);
-      });
-    });
-  }
-});
-const upload = multer({ storage });
-
 //이미지 파일(프로필 파일)을 POST로 보내면 DB에 등록하고 JSON으로 뿌려진 파일명을 가지고 와서 저장한다.
 app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
+    console.log(req.file);
     res.json(req.file);
 
     db.User.findOne({
-      _id: req.query.userauthid
+      _id: req.body.userauthid
     }, function(err, docs) {
       if (err) throw err;
 
@@ -349,4 +331,18 @@ app.get('/files/:filename', function(req, res) {
 
      return res.json(file);
    });
+});
+
+var port = process.env.PORT || 3000;
+
+app.listen(port, function() {
+  console.log('Pick Server running on port 3000!')
+})
+
+dba.on('error', console.error.bind(console, 'connection error:'));
+
+dba.once('open', function(callback) {
+  console.log("mongo DB connected...")
+  gfs = Grid(dba.db, mongoose.mongo);
+  gfs.collection('uploads');
 });
