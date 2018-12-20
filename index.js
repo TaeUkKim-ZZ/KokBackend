@@ -299,7 +299,7 @@ app.get('/files/:filename', function(req, res) {
      }
 
      if(file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-        const readstream = gfs.creatReadStream(file.filename);
+        const readstream = gfs.createReadStream(file.filename);
         readstream.pipe(res);
      } else {
        res.status(404).json ({
