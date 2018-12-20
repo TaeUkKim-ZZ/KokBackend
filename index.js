@@ -10,8 +10,11 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI); // connect to our database
 
 var dba = mongoose.connection;
-
 var app = express();
+var Grid = require('gridfs-stream');
+const crypto = require('crypto');
+const path = require('path');
+const GridFsStorage = require('multer-gridfs-storage');
 
 //회원가입
 app.get("/user/signup", function(req, res) {
@@ -232,4 +235,35 @@ dba.on('error', console.error.bind(console, 'connection error:'));
 
 dba.once('open', function(callback) {
   console.log("mongo DB connected...")
+});
+
+dba.open(function (err) {
+  if (err) return handleError(err);
+  var gfs = Grid(dba, mongoose.mongo);
+  gfs.collection('uploads');
+})
+
+const storage = new GridFsStorage({
+  url: process.env.MONGODB_URI ,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: 'uploads'
+        };
+        resolve(fileInfo);
+      });
+    });
+  }
+});
+const upload = multer({ storage });
+
+app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
+    res.json({file : req.file});
+    
 });
