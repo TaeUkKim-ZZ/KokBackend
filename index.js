@@ -5,6 +5,7 @@ var db = require('./mongo');
 const crypto = require('crypto'); //Node.js 에서 제공하는 암호화 모듈
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+const methodOverride = require('method-override');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI); // connect to our database
