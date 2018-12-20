@@ -265,6 +265,12 @@ app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
       _id: req.query.userauthid
     }, function(err, docs) {
       if (err) throw err;
+      if (docs == null) {
+        res.sendStatus(409)
+      } else {
+        console.log(docs);
+        //res.send(docs) //Json response
+      }
 
       docs.profileimage = req.file.filename;
 
@@ -273,13 +279,6 @@ app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
           throw err;
         } else res.send(docs);
       });
-
-      if (docs == null) {
-        res.sendStatus(409)
-      } else {
-        console.log(docs);
-        //res.send(docs) //Json response
-      }
     });
 });
 
