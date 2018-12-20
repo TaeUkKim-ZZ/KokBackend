@@ -234,13 +234,9 @@ dba.on('error', console.error.bind(console, 'connection error:'));
 
 dba.once('open', function(callback) {
   console.log("mongo DB connected...")
-});
-
-dba.open(function (err) {
-  if (err) return handleError(err);
   var gfs = Grid(dba, mongoose.mongo);
   gfs.collection('uploads');
-})
+});
 
 const storage = new GridFsStorage({
   url: process.env.MONGODB_URI ,
