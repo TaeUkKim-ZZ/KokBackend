@@ -290,7 +290,7 @@ app.get('/files', function(req, res) {
    });
 });
 
-app.get('/files/:filename', function(req, res) {
+app.get('/images/:filename', function(req, res) {
    gfs.files.findOne({filename: req.params.filename}, function(err, file) {
      if(!file || file.length === 0) {
        return res.status(404).json({
@@ -306,7 +306,5 @@ app.get('/files/:filename', function(req, res) {
          err: 'Not an image'
        });
      }
-
-     return res.json(file);
    });
 });
