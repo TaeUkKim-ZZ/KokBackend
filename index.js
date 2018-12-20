@@ -16,6 +16,13 @@ const Grid = require('gridfs-stream');
 const path = require('path');
 const GridFsStorage = require('multer-gridfs-storage');
 
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.json());       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
+
 //회원가입
 app.get("/user/signup", function(req, res) {
   //console.log(req.query.email);
@@ -247,7 +254,7 @@ const storage = new GridFsStorage({
         if (err) {
           return reject(err);
         }
-        console.log(req.query.idfile);
+        console.log(req.body.idfile);
         //파일 이름을 유저 고유 authid로 하는 방법 없을까?
         const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
@@ -263,5 +270,4 @@ const upload = multer({ storage });
 
 app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
     res.json({file : req.file});
-
 });
