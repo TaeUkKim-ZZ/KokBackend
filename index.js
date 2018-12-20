@@ -262,7 +262,7 @@ app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
     res.json(req.file);
 
     db.User.findOne({
-      _id: req.body.userauthid
+      _id: req.query.userauthid
     }, function(err, docs) {
       if (err) throw err;
 
