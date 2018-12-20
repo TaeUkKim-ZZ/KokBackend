@@ -20,10 +20,14 @@ var bodyParser = require('body-parser')
 
 let gfs;
 
-app.use(bodyParser.json());       // to support JSON-encoded bodies
+/*app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
-}));
+}));*/
+
+app.use(bodyParser.json());
+app.use(methodOverride('_method'));
+app.set('view engine', 'ejs');
 
 //회원가입
 app.get("/user/signup", function(req, res) {
@@ -293,7 +297,7 @@ app.get('/files/:filename', function(req, res) {
        })
      }
 
-     if(file.contentType === 'image/jpeg' || file.contentType === 'img/png') {
+     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
         const readstream = gfs.creatReadStream(file.filename);
         readstream.pipe(res);
      } else {
