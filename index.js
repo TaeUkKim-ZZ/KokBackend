@@ -11,7 +11,8 @@ mongoose.connect(process.env.MONGODB_URI); // connect to our database
 
 var dba = mongoose.connection;
 var app = express();
-var Grid = require('gridfs-stream');
+const multer = require('multer');
+const Grid = require('gridfs-stream');
 const path = require('path');
 const GridFsStorage = require('multer-gridfs-storage');
 
