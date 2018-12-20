@@ -150,7 +150,7 @@ app.get("/addpick", function(req, res) {
   var newkok = new db.Data();
   newkok.userauthid = req.query.userauthid;
   newkok.usernickname = req.query.usernickname;
-  newkok.profileimage = req.query.userprofile;
+  newkok.profileimage = req.query.profileimage;
   newkok.message = req.query.message;
   newkok.location = location;
 
