@@ -255,7 +255,7 @@ const storage = new GridFsStorage({
           return reject(err);
         }
         //파일 이름을 유저 고유 authid로 하는 방법 없을까?
-        console.log(req);
+        console.log(req.body);
         const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
