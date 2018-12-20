@@ -274,7 +274,7 @@ app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
 });
 
 app.get('/files', function(req, res) {
-   gfs.files.find().toArray(function(err, files) {
+   gfs.uploads.files.find().toArray(function(err, files) {
      if(!files || files.length === 0) {
        return res.status(404).json({
          err : 'No files exist'
@@ -286,7 +286,7 @@ app.get('/files', function(req, res) {
 });
 
 app.get('/files/:filename', function(req, res) {
-   gfs.files.findOne({filename: req.params.filename}, function(err, file) {
+   gfs.uploads.files.findOne({filename: req.params.filename}, function(err, file) {
      if(!file || file.length === 0) {
        return res.status(404).json({
          err: 'No file exists'
