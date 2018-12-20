@@ -274,11 +274,7 @@ app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
 
       docs.profileimage = req.file.filename;
 
-      docs.save(function(err) {
-        if (err) {
-          throw err;
-        } else res.send(docs);
-      });
+      docs.save();
     });
 });
 
