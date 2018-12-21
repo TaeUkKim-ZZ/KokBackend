@@ -186,7 +186,7 @@ app.get("/getcomments", function(req, res) {
   });*/
 
   db.Data.update({
-    { _id : req.query.userauthid}
+    { _id : req.query.userauthid},
     {
       $push: {
         comments: {
