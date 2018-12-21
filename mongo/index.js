@@ -15,7 +15,7 @@ var commentSchema = new Schema({
     contents: String,
     authorauthid: String,
     authorusernickname: String,
-    comment_date: {type: Date, default: moment().format('YYYY-MM-DD hh:mm:ss')}
+    comment_date: {type: String, default: moment().format('YYYY-MM-DD hh:mm:ss')}
 });
 
 var dataSchema = mongoose.Schema({
