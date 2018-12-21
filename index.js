@@ -185,7 +185,7 @@ app.get("/getcomments", function(req, res) {
     console.log(result);
   });*/
 
-  db.Data.update(
+  /*db.Data.update(
     { _id : req.query.userauthid},
     {
       $push: {
@@ -193,20 +193,14 @@ app.get("/getcomments", function(req, res) {
           $sort: {comment_date : -1}
         }
       }
-    });
+    });*/
 
-  /*db.Data.findOne({
-    _id: req.query.userauthid
-  }, {
-    sort: {
-      comment_date: -1
-    }
-  }, function(err, comment) {
+  db.Data.findOne({_id: req.query.userauthid}, function(err, comment) {
     if (err) return res.status(500);
     else console.log(comment);
 
     if (comment != null) res.send(comment);
-  });*/
+  });
 });
 
 //콕에 댓글 추가.
