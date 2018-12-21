@@ -174,7 +174,7 @@ app.get("/deletepick", function(req, res) {
 app.get("/getcomments", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.//글 고유번호
   db.Data.aggregate(
-    [{ "$unwind": "$comments"}, { "$sort": { "comments.comment_date": 1}}, {"$group": {"addressBook": {"$push": "$comments"}}}])
+    [{ "$unwind": "$comments"}, { "$sort": { "comments.comment_date": 1}}, {"$group": {"_id": "$_id", "comments": {"$push": "$comments"}}}])
   db.Data.findOne({ _id: req.query.userauthid}, {sort: {comment_date: -1}}, function(err, comment) {
     if (err) return res.status(500);
     else console.log(comment);
