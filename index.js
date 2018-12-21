@@ -177,12 +177,23 @@ app.get("/getcomments", function(req, res) {
   /*db.Data.aggregate(
     [{ "$unwind": "$comments"}, { "$sort": { "comments.comment_date": 1}}, {"$group": {"_id": "$_id", "comments": {"$push": "$comments"}}}]);*/
 
-  db.Data.aggregate([{ $match: { _id: req.query.userauthid }}, { $unwind: "$comments" }, { $sort: { "comments.comment_date": 1 }}, { $group: { _id: "$_id", comments: { "$push": "$comments" }}}], function(err, result) {
+  /*db.Data.aggregate([{ $match: { _id: req.query.userauthid }}, { $unwind: "$comments" }, { $sort: { "comments.comment_date": 1 }}, { $group: { _id: "$_id", comments: { "$push": "$comments" }}}], function(err, result) {
     if (err) {
       console.log(err);
       return;
     }
     console.log(result);
+  });*/
+
+  db.Data.update({
+    { _id : req.query.userauthid}
+    {
+      $push: {
+        comments: {
+          $sort: {comment_date : -1}
+        }
+      }
+    }
   });
 
   /*db.Data.findOne({
