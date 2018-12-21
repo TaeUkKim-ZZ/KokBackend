@@ -179,6 +179,9 @@ app.get("/getcomments", function(req, res) {
     if (err) return res.status(500);
     else console.log(comment);
 
+    comment.comments.sort({datefield: -1}, function(err, cursor) {
+    });
+    
     if(comment != null) res.send(comment);
   });
 });
