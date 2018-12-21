@@ -173,13 +173,18 @@ app.get("/deletepick", function(req, res) {
 
 app.get("/getcomments", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.
-  db.Data.findOne({_id: req.query.userauthid}, {sort: {comments.comment_date: -1 }}, function(err, comment) {
+  db.Data.aggregate({ $sort: {
+        'comments.comment_date': -1
+    }});
+  db.Data.findOne({
+    _id: req.query.userauthid, //글 고유번호
+  }, function(err, comment) {
     if (err) return res.status(500);
     else console.log(comment);
 
-    /*comment.comments.aggregate({'$sort' :
+    comment.comments.aggregate({'$sort' :
         {'comment_date': 1}
-    });*/
+    });
 
     if(comment != null) res.send(comment);
   });
