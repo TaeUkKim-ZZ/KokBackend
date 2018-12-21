@@ -14,7 +14,6 @@ var commentSchema = new Schema({
     contents: String,
     authorauthid: String,
     authorusernickname: String,
-    isdeleted : {type: Boolean, default: false},
     comment_date: {type: Date, default: Date.now()}
 });
 
