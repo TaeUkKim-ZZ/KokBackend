@@ -185,7 +185,7 @@ app.get("/getcomments", function(req, res) {
     console.log(result);
   });*/
 
-  db.Data.update({
+  db.Data.update(
     { _id : req.query.userauthid},
     {
       $push: {
@@ -193,8 +193,7 @@ app.get("/getcomments", function(req, res) {
           $sort: {comment_date : -1}
         }
       }
-    }
-  });
+    });
 
   /*db.Data.findOne({
     _id: req.query.userauthid
