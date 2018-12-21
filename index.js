@@ -174,8 +174,8 @@ app.get("/deletepick", function(req, res) {
 
 app.get("/getcomments", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.//글 고유번호
-  /*db.Data.aggregate(
-    [{ "$unwind": "$comments"}, { "$sort": { "comments.comment_date": 1}}, {"$group": {"_id": "$_id", "comments": {"$push": "$comments"}}}]);*/
+  db.Data.aggregate(
+    [{ "$unwind": "$comments"}, { "$sort": { "comments.comment_date": 1}}, {"$group": {"_id": "$_id", "comments": {"$push": "$comments"}}}]);
 
   /*db.Data.aggregate([{ $match: { _id: req.query.userauthid }}, { $unwind: "$comments" }, { $sort: { "comments.comment_date": 1 }}, { $group: { _id: "$_id", comments: { "$push": "$comments" }}}], function(err, result) {
     if (err) {
