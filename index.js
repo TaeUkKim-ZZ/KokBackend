@@ -176,7 +176,7 @@ app.get("/getcomments", function(req, res) {
   db.Data.aggregate(
     [{ $match: {_id : req.query.userauthid}  },
     { $unwind: '$comments' },
-    { $sort: {'comments.comment_date': -1} }])
+    { $sort: {'comments.comment_date': -1}  }])
   db.Data.findOne({ _id: req.query.userauthid}, {sort: {comment_date: -1}}, function(err, comment) {
     if (err) return res.status(500);
     else console.log(comment);
