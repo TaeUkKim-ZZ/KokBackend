@@ -22,7 +22,7 @@ var bodyParser = require('body-parser')
 let gfs;
 
 const storage = new GridFsStorage({
-  url: process.env.MONGODB_URI ,
+  url: process.env.MONGODB_URI,
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
@@ -40,7 +40,9 @@ const storage = new GridFsStorage({
     });
   }
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage
+});
 
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
@@ -114,14 +116,14 @@ app.get("/edituserinfo", function(req, res) {
     if (err) throw err;
 
     //유저 수정 내용 반영.....
-    if(req.query.password != "") {
-        docs.password = req.query.password;
-    } else if(req.query.nickname != "") {
-        docs.nickname = req.query.nickname;
-    } else if(req.query.gender != "") {
-        docs.gender = req.query.gender;
-    } else if(req.query.introduce != "") {
-        docs.introduce = req.query.introduce;
+    if (req.query.password != "") {
+      docs.password = req.query.password;
+    } else if (req.query.nickname != "") {
+      docs.nickname = req.query.nickname;
+    } else if (req.query.gender != "") {
+      docs.gender = req.query.gender;
+    } else if (req.query.introduce != "") {
+      docs.introduce = req.query.introduce;
     }
 
     docs.save(function(err) {
@@ -167,20 +169,34 @@ app.get("/addpick", function(req, res) {
 app.get("/deletepick", function(req, res) {
   db.User.remove({
     _id: req.query.deleteuseruid
-  }, function() {
-  });
+  }, function() {});
 });
 
 app.get("/getcomments", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.//글 고유번호
-  db.Data.aggregate(
-    [{ "$unwind": "$comments"}, { "$sort": { "comments.comment_date": 1}}, {"$group": {"_id": "$_id", "comments": {"$push": "$comments"}}}])
-  db.Data.findOne({ _id: req.query.userauthid}, {sort: {comment_date: -1}}, function(err, comment) {
+  /*db.Data.aggregate(
+    [{ "$unwind": "$comments"}, { "$sort": { "comments.comment_date": 1}}, {"$group": {"_id": "$_id", "comments": {"$push": "$comments"}}}]);*/
+
+  db.Data.aggregate([{ $match: { _id: req.query.userauthid }}, { $unwind: "$comments" }, { $sort: { "comments.comment_date": 1 }}, { $group: { _id: "$_id", comments: { "$push": "$comments" }}}], function(err, result) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(result);
+  });
+
+  /*db.Data.findOne({
+    _id: req.query.userauthid
+  }, {
+    sort: {
+      comment_date: -1
+    }
+  }, function(err, comment) {
     if (err) return res.status(500);
     else console.log(comment);
 
-    if(comment != null) res.send(comment);
-  });
+    if (comment != null) res.send(comment);
+  });*/
 });
 
 //콕에 댓글 추가.
@@ -208,11 +224,19 @@ app.get("/addcomment", function(req, res) {
 app.get("/deletecomment", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.
   var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
-  db.Data.findOneAndUpdate(
-    {_id: req.query.userauthid}, {$pull: { comments : { _id: newId}}}, function(err, comment) {
+  db.Data.findOneAndUpdate({
+    _id: req.query.userauthid
+  }, {
+    $pull: {
+      comments: {
+        _id: newId
+      }
+    }
+  }, function(err, comment) {
     if (err) return res.status(500);
     else {
-      console.log(comment); res.send(comment)
+      console.log(comment);
+      res.send(comment)
     }
   });
 });
@@ -253,79 +277,81 @@ app.get("/deletepickmy", function(req, res) {
   //고유 ID를 받아서 제거한다.
   db.Data.remove({
     _id: req.query.deleteuseruid
-  }, function() {
-  });
+  }, function() {});
 });
 
 //이미지 파일(프로필 파일)을 POST로 보내면 DB에 등록하고 JSON으로 뿌려진 파일명을 가지고 와서 저장한다.
 app.post('/uploadprofileimage', upload.single('file'), function(req, res) {
-    console.log(req.file);
-    res.json(req.file);
+  console.log(req.file);
+  res.json(req.file);
 
-    db.User.findOne({
-      _id: req.query.userauthid
-    }, function(err, docs) {
-      if (err) throw err;
-      if (docs == null) {
-        res.sendStatus(409)
-      } else {
-        console.log(docs);
-        //res.send(docs) //Json response
-      }
+  db.User.findOne({
+    _id: req.query.userauthid
+  }, function(err, docs) {
+    if (err) throw err;
+    if (docs == null) {
+      res.sendStatus(409)
+    } else {
+      console.log(docs);
+      //res.send(docs) //Json response
+    }
 
-      docs.profileimage = req.file.filename;
-      docs.save();
-    });
+    docs.profileimage = req.file.filename;
+    docs.save();
+  });
 });
 
 app.get('/files', function(req, res) {
-   gfs.files.find().toArray(function(err, files) {
-     if(!files || files.length === 0) {
-       return res.status(404).json({
-         err : 'No files exist'
-       });
-     }
+  gfs.files.find().toArray(function(err, files) {
+    if (!files || files.length === 0) {
+      return res.status(404).json({
+        err: 'No files exist'
+      });
+    }
 
-     return res.json(files);
-   });
+    return res.json(files);
+  });
 });
 
 app.get('/images/:filename', function(req, res) {
-   gfs.files.findOne({filename: req.params.filename}, function(err, file) {
-     if(!file || file.length === 0) {
-       return res.status(404).json({
-         err: 'No file exists'
-       })
-     }
+  gfs.files.findOne({
+    filename: req.params.filename
+  }, function(err, file) {
+    if (!file || file.length === 0) {
+      return res.status(404).json({
+        err: 'No file exists'
+      })
+    }
 
-     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg' || file.contentType === 'multipart/form-data') {
-        const readstream = gfs.createReadStream(file.filename);
-        readstream.pipe(res);
-     } else {
-       res.status(404).json ({
-         err: 'Not an image'
-       });
-     }
-   });
+    if (file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg' || file.contentType === 'multipart/form-data') {
+      const readstream = gfs.createReadStream(file.filename);
+      readstream.pipe(res);
+    } else {
+      res.status(404).json({
+        err: 'Not an image'
+      });
+    }
+  });
 });
 
 app.get('/files/:filename', function(req, res) {
-   gfs.files.findOne({filename: req.params.filename}, function(err, file) {
-     if(!file || file.length === 0) {
-       return res.status(404).json({
-         err: 'No file exists'
-       })
-     }
+  gfs.files.findOne({
+    filename: req.params.filename
+  }, function(err, file) {
+    if (!file || file.length === 0) {
+      return res.status(404).json({
+        err: 'No file exists'
+      })
+    }
 
-     if(file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg' || file.contentType === 'multipart/form-data') {
-     } else {
-       res.status(404).json ({
-         err: 'Not an image'
-       });
-     }
+    if (file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/jpg' || file.contentType === 'multipart/form-data') {} else {
+      res.status(404).json({
+        err: 'Not an image'
+      });
+    }
 
-     return res.json(file);
-   });
+    return res.json(file);
+  });
 });
 
 var port = process.env.PORT || 3000;
