@@ -93,9 +93,8 @@ app.get("/user/signin", function(req, res) {
 });
 
 app.get("/getuserinfo", function(req, res) {
-  var newId = new mongoose.mongo.ObjectId(req.query.useruid);
   db.User.findOne({
-    _id: newId
+    _id: req.query.useruid
   }, function(err, docs) {
     if (err) throw err;
 
