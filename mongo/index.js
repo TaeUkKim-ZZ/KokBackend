@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var moment = require('moment');
 var Schema = mongoose.Schema;
 
 var userSchema = mongoose.Schema({
@@ -14,7 +15,7 @@ var commentSchema = new Schema({
     contents: String,
     authorauthid: String,
     authorusernickname: String,
-    comment_date: {type: Date, default: Date.now()}
+    comment_date: {type: Date, default: moment().format('YYYY-MM-DD hh:mm:ss')}
 });
 
 var dataSchema = mongoose.Schema({
