@@ -278,6 +278,18 @@ app.get("/addcomment", function(req, res) {
   });
 });
 
+app.get("/modifyfirebasetoken", function(req, res) {
+  db.User.findOne({
+    _id : req.query.userauthid
+  }, function(err, user) {
+    if(err) return res.Status(500);
+    else {
+      user.firebasetoken = req.query.firebasetoken;
+      console.log(user);
+    }
+  });
+});
+
 app.get("/deletecomment", function(req, res) {
   //Userauthid, longitude, longitude를 받아서 댓글 추가.
   var newId = new mongoose.mongo.ObjectId(req.query.idofcomment);
