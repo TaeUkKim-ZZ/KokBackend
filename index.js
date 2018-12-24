@@ -285,7 +285,7 @@ app.get("/modifyfirebasetoken", function(req, res) {
     if(err) return res.Status(500);
     else {
       user.firebasetoken = req.query.firebasetoken;
-      console.log(user);
+      console.log(user.firebasetoken);
     }
   });
 });
