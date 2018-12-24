@@ -8,7 +8,8 @@ var userSchema = mongoose.Schema({
     gender : {type : String},
     nickname : {type: String},
     introduce : {type: String},
-    profileimage : {type: String}
+    profileimage : {type: String},
+    firebasetoken : {type: String}
 });
 
 var commentSchema = new Schema({

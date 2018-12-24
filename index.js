@@ -1,5 +1,9 @@
 var express = require('express');
 
+var FCM = require('fcm-node');
+var serverKey = 'AAAAtDlN4oM:APA91bHvMeNJciSPG30omwpo9a-Dm9-ieUTtIvzt0KGjU3cJ0laBiMhnXgWeuCsYefZfU1Mur9rjzsa3G1T7eD7EgR4j_eqCBBOIut3jwBAwcnZh-m0RJPhzCJZahLNfasYJ2i62Mr5c';
+
+
 var router = express.Router();
 var db = require('./mongo');
 const crypto = require('crypto'); //Node.js 에서 제공하는 암호화 모듈
@@ -63,6 +67,7 @@ app.get("/user/signup", function(req, res) {
         gender: req.query.gender,
         nickname: req.query.nickname,
         introduce: req.query.introduce,
+        firebasetoken: req.query.firebasetoken,
         profileimage: 'default'
       });
 
@@ -195,7 +200,9 @@ app.get("/getcomments", function(req, res) {
       }
     });*/
 
-  db.Data.findOne({_id: req.query.userauthid}, function(err, comment) {
+  db.Data.findOne({
+    _id: req.query.userauthid
+  }, function(err, comment) {
     if (err) return res.status(500);
     else console.log(comment);
 
@@ -221,6 +228,51 @@ app.get("/addcomment", function(req, res) {
     comment.save(function(err) {
       if (err) res.status(500);
       else res.send(comment);
+    });
+
+    db.User.findOne({
+      _id: req.query.userauthid
+    }, function(err, comment) {
+      if (err) return res.status(500);
+      else {
+        var client_token = comment.firebasetoken;
+
+        var push_data = {
+          // 수신대상
+          to: client_token,
+          // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
+          notification: {
+            title: "Hello Node",
+            body: "Node로 발송하는 Push 메시지 입니다.",
+            sound: "default",
+            click_action: "FCM_PLUGIN_ACTIVITY",
+            icon: "fcm_push_icon"
+          },
+          // 메시지 중요도
+          priority: "high",
+          // App 패키지 이름
+          restricted_package_name: "neolabs.kok",
+          // App에게 전달할 데이터
+          data: {
+            num1: 2000,
+            num2: 3000
+          }
+        };
+
+        /** 아래는 푸시메시지 발송절차 */
+        var fcm = new FCM(serverKey);
+
+        fcm.send(push_data, function(err, response) {
+          if (err) {
+            console.error('Push메시지 발송에 실패했습니다.');
+            console.error(err);
+            return;
+          }
+
+          console.log('Push메시지가 발송되었습니다.');
+          console.log(response);
+        });
+      }
     });
   });
 });
