@@ -99,7 +99,7 @@ app.get("/user/signin", function(req, res) {
   });
 });
 
-app.get("/getuserinfo", function(req, res) {
+/*app.get("/getuserinfo", function(req, res) {
   db.User.findOne({
     _id: req.query.useruid
   }, function(err, docs) {
@@ -112,7 +112,7 @@ app.get("/getuserinfo", function(req, res) {
       res.send(docs) //Json response
     }
   });
-});
+});*/
 
 app.get("/edituserinfo", function(req, res) {
   db.User.findOne({
@@ -280,12 +280,25 @@ app.get("/addcomment", function(req, res) {
 
 app.get("/modifyfirebasetoken", function(req, res) {
   db.User.findOne({
-    email: req.query.useremail
+    email:req.query.useremail
   }, function(err, user) {
     if(err) return res.Status(500);
     else {
       user.firebasetoken = req.query.firebasetoken;
-      console.log(user.firebasetoken);
+      console.log(req.query.firebasetoken);
+
+      user.save(function(err) {
+        if (err) {
+          throw err;
+        } else res.send(user);
+      });
+
+      if (user == null) {
+        res.sendStatus(409)
+      } else {
+        console.log(user);
+        //res.send(docs) //Json response
+      }
     }
   });
 });
