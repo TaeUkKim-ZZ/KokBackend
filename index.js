@@ -280,7 +280,7 @@ app.get("/addcomment", function(req, res) {
 
 app.get("/modifyfirebasetoken", function(req, res) {
   db.User.findOne({
-    email: req.query.useremail;
+    email: req.query.useremail
   }, function(err, user) {
     if(err) return res.Status(500);
     else {
