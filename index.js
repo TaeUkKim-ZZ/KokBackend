@@ -231,12 +231,12 @@ app.get("/addcomment", function(req, res) {
     });
 
     db.User.findOne({
-      _id: req.query.userauthid
-    }, function(err, comment) {
+      _id: comment.userauthid
+    }, function(err, comment2) {
       if (err) return res.status(500);
       else {
-        console.log(comment);
-        var client_token = comment.firebasetoken;
+        console.log(comment2);
+        var client_token = comment2.firebasetoken;
 
         var push_data = {
           // 수신대상
