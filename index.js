@@ -255,8 +255,8 @@ app.get("/addcomment", function(req, res) {
           restricted_package_name: "neolabs.kok",
           // App에게 전달할 데이터
           data: {
-            num1: 2000,
-            num2: 3000
+            title: 'Kok에서 알립니다!',
+            content: comment2.nickname + '님이 댓글을 달았습니다. 확인을 하여주세요.'
           }
         };
 
