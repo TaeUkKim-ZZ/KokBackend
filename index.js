@@ -99,7 +99,7 @@ app.get("/user/signin", function(req, res) {
   });
 });
 
-/*app.get("/getuserinfo", function(req, res) {
+app.get("/getuserinfo", function(req, res) {
   db.User.findOne({
     _id: req.query.useruid
   }, function(err, docs) {
@@ -112,7 +112,7 @@ app.get("/user/signin", function(req, res) {
       res.send(docs) //Json response
     }
   });
-});*/
+});
 
 app.get("/edituserinfo", function(req, res) {
   db.User.findOne({
