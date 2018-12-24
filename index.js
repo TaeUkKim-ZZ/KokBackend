@@ -235,6 +235,7 @@ app.get("/addcomment", function(req, res) {
     }, function(err, comment) {
       if (err) return res.status(500);
       else {
+        console.log(comment);
         var client_token = comment.firebasetoken;
 
         var push_data = {
