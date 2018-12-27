@@ -123,11 +123,14 @@ app.get("/edituserinfo", function(req, res) {
     //유저 수정 내용 반영.....
     if (req.query.password != "") {
       docs.password = req.query.password;
-    } else if (req.query.nickname != "") {
+    } 
+    if (req.query.nickname != "") {
       docs.nickname = req.query.nickname;
-    } else if (req.query.gender != "") {
+    }
+    if (req.query.gender != "") {
       docs.gender = req.query.gender;
-    } else if (req.query.introduce != "") {
+    }
+    if (req.query.introduce != "") {
       docs.introduce = req.query.introduce;
     }
 
